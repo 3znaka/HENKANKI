@@ -24,7 +24,7 @@ for prefix, group_files in file_groups.items():
     
     # Объединение аудиофайлов в один с использованием crossfade
     combined = AudioSegment.empty()
-    crossfade_duration = 200  # Длительность перекрёстного перехода (fading) в миллисекундах
+    crossfade_duration = 240  # Длительность перекрёстного перехода (fading) в миллисекундах
     
     for i, file in enumerate(group_files):
         file_path = os.path.join(folder_path, file)

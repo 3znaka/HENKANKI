@@ -1,9 +1,15 @@
+import configparser
 from pydub import AudioSegment
 import subprocess
 import os
 
-# Путь к исходному файлу
-input_file = "song.wav"
+# Загрузка конфигурации из файла config.txt
+config = configparser.ConfigParser()
+config.read('./config.txt')
+
+# Получение входного файла из переменной INPUTAUDIO
+input_file = config['DEFAULT']['INPUTAUDIO']
+
 # Длительность отрезка в миллисекундах (15 секунд) и дополнительно 200 мс для перекрытия
 segment_duration = 15 * 1000
 overlap_duration = 200  # 200 миллисекунд
@@ -20,6 +26,10 @@ num_segments = len(audio) // segment_duration + (1 if len(audio) % segment_durat
 # Директория для временных отрезков
 temp_dir = "temp_segments"
 os.makedirs(temp_dir, exist_ok=True)
+
+# Директория для выходных файлов
+output_dir = "inputfiles"
+os.makedirs(output_dir, exist_ok=True)
 
 # Путь к fdkaac исполнителю
 fdkaac_path = "C:\\GitHub\\qr2aac\\fdkaac\\fdkaac.exe"  # Замените на актуальный путь
@@ -40,8 +50,8 @@ for i in range(num_segments):
     # Сохранение сегмента
     segment.export(segment_path, format="wav")
     
-    # Прямое кодирование в m4a формат без промежуточного сохранения
-    output_file = f"{prefix}{str(i).zfill(4)}.m4a"
+    # Обновленный путь для итогового файла
+    output_file = os.path.join(output_dir, f"{prefix}{str(i).zfill(4)}.m4a")
     
     # Команда для кодировки
     command = [

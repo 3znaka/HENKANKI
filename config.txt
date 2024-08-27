@@ -1,0 +1,3 @@
+[DEFAULT]
+inputaudio = C:/Users/danil/Downloads/Pink-Floyd-Breathe.wav
+

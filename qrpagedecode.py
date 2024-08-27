@@ -32,10 +32,15 @@ def read_qr_codes_from_image(image):
 
 def main():
     image_folder = 'output_pages'
+    output_folder = 'tomerge'
+    
     if not os.path.exists(image_folder):
         print(f"Папка {image_folder} не существует.")
         return
 
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+    
     files_data = defaultdict(lambda: {
         "decoded_chunks": defaultdict(lambda: None),
         "total_chunks": None,
@@ -83,11 +88,12 @@ def main():
             sorted_chunks = [data["decoded_chunks"][i] for i in range(data["total_chunks"])]
             
             output_file_name = f"{data['file_name']}.{data['file_ext']}"
+            output_file_path = os.path.join(output_folder, output_file_name)
             try:
-                with open(output_file_name, 'wb') as output_file:
+                with open(output_file_path, 'wb') as output_file:
                     for chunk in sorted_chunks:
                         output_file.write(chunk)
-                print(f"Файл успешно восстановлен: {output_file_name}")
+                print(f"Файл успешно восстановлен: {output_file_path}")
             except Exception as e:
                 print(f"Ошибка при записи файла: {e}")
 
