@@ -128,8 +128,7 @@ song_name_entry.grid(column=2, row=1, pady=10, padx=10, sticky=tk.W)
 # Создание и размещение кнопок с улучшенным стилем
 ttk.Button(mainframe, text="1. AUDIO TO FILES (16 kbps)", command=run_convert, style="Accent.TButton").grid(column=0, row=0, pady=10, padx=10, sticky=(tk.W, tk.E))
 
-# Создание и размещение кнопок с улучшенным стилем
-ttk.Button(mainframe, text="1. AUDIO TO FILES (8 kbps)", command=run_convert8k, style="Accent.TButton").grid(column=0, row=0, pady=10, padx=10, sticky=(tk.W, tk.E))
+ttk.Button(mainframe, text="1. AUDIO TO FILES (8 kbps)", command=run_convert8k, style="Accent.TButton").grid(column=0, row=1, pady=10, padx=10, sticky=(tk.W, tk.E))
 
 ttk.Button(mainframe, text="2. FILES to QR CHUNKS", command=run_qrencode, style="Accent.TButton").grid(column=0, row=2, pady=10, padx=10, sticky=(tk.W, tk.E))
 ttk.Button(mainframe, text="3. QR CHUNKS to PAGES", command=run_pagegen, style="Accent.TButton").grid(column=0, row=3, pady=10, padx=10, sticky=(tk.W, tk.E))
