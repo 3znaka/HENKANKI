@@ -1,3 +1,5 @@
 [DEFAULT]
-inputaudio = C:/Users/danil/Downloads/Pink-Floyd-Breathe.wav
+inputaudio = C:/Users/danil/Downloads/Cortex-La-rue.wav
+fdkaac = C:\\GitHub\\qr2aac\\fdkaac\\fdkaac.exe
+songname = t0
 

@@ -37,11 +37,21 @@ def read_qr_code(frame):
 def assemble_file(file_chunks):
     sorted_chunks = [file_chunks.chunks[i] for i in range(file_chunks.total_chunks)]
     file_name_with_ext = f"{file_chunks.file_name}.{file_chunks.file_ext}"
+    directory = 'tomerge'  # Папка, куда будет сохранен файл
+    
+    # Создаем путь к файлу, включая папку
+    file_path = os.path.join(directory, file_name_with_ext)
+    
     try:
-        with open(file_name_with_ext, 'wb') as output_file:
+        # Убедимся, что директория существует, если нет - создаем
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+        
+        # Открываем файл по новому пути
+        with open(file_path, 'wb') as output_file:
             for chunk in sorted_chunks:
                 output_file.write(chunk)
-        print(f"Файл успешно восстановлен: {file_name_with_ext}")
+        print(f"Файл успешно восстановлен: {file_path}")
     except Exception as e:
         print(f"Ошибка при записи файла: {e}")
 

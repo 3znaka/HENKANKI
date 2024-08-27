@@ -4,7 +4,7 @@ import base64
 import qrcode
 from PIL import Image, ImageDraw, ImageFont
 
-def split_file(file_path, chunk_size=640):
+def split_file(file_path, chunk_size=480):
     """Разбивает файл на блоки размером chunk_size байт."""
     with open(file_path, 'rb') as f:
         chunks = []
@@ -36,7 +36,7 @@ def create_qr_code(data, output_path, chunk_number, file_name, total_chunks):
         font = ImageFont.truetype("arial.ttf", 42)
     except IOError:
         font = ImageFont.load_default()
-    text = f"{file_name} {chunk_number + 1}/{total_chunks}"  # Плюс 1 для начала счёта с 1
+    text = f"{file_name} {chunk_number}/{total_chunks}"  
     text_width = draw.textlength(text, font=font)
     text_position = ((img_width - text_width) // 2, img_height - 20)
     draw.text(text_position, text, font=font, fill="black")

@@ -16,7 +16,7 @@ overlap_duration = 200  # 200 миллисекунд
 total_segment_duration = segment_duration + overlap_duration
 
 # Ввод первых двух символов от пользователя
-prefix = input("Введите первые два символа для названия файлов: ")
+prefix = config['DEFAULT']['SONGNAME']
 
 # Загрузка аудиофайла
 audio = AudioSegment.from_wav(input_file)
@@ -32,7 +32,7 @@ output_dir = "inputfiles"
 os.makedirs(output_dir, exist_ok=True)
 
 # Путь к fdkaac исполнителю
-fdkaac_path = "C:\\GitHub\\qr2aac\\fdkaac\\fdkaac.exe"  # Замените на актуальный путь
+fdkaac_path = config['DEFAULT']['FDKAAC']  # Замените на актуальный путь
 
 # Создание и кодирование сегментов
 for i in range(num_segments):
