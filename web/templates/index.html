@@ -3,21 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR Code File Recovery</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Загрузка файлов</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #333;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        h1 {
+            margin: 20px 0;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 90%;
+            max-width: 500px;
+        }
+        input[type="file"] {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #fff;
+            background: #444;
+            color: #fff;
+            cursor: pointer;
+        }
+        button {
+            padding: 10px 20px;
+            background: #555;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #777;
+        }
+        #log {
+            margin-top: 20px;
+            width: 90%;
+            max-width: 500px;
+            background: #222;
+            padding: 20px;
+            border: 1px solid #444;
+            height: 200px;
+            overflow-y: auto;
+        }
+        a {
+            color: #1e90ff;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Восстановление файла по QR-кодам</h1>
-        <form id="uploadForm">
-            <input type="file" name="files" id="fileInput" multiple class="file-input">
-            <br>
-            <button type="submit">Загрузить и восстановить</button>
-        </form>
-        <p id="status"></p>
-        <a id="downloadLink" style="display:none;" href="#">Скачать восстановленный файл</a>
-    </div>
+    <h1>Загрузка файлов</h1>
+    <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="files" id="files" multiple required>
+        <button type="submit">Загрузить</button>
+    </form>
+    <div id="log"></div>
 
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            const log = document.getElementById('log');
+
+            // Очистка лога
+            log.innerHTML = '';
+
+            // Скрытие кнопки "Загрузить"
+            form.querySelector('button').style.display = 'none';
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    log.innerHTML = `<p>${data.message}</p>`;
+                    if (data.download_url) {
+                        log.innerHTML += `<p><a href="${data.download_url}" download>Скачать результат</a></p>`;
+                    }
+                } else {
+                    log.innerHTML = `<p>Ошибка: ${data.error}</p>`;
+                }
+                // Показать кнопку снова
+                form.querySelector('button').style.display = 'block';
+            })
+            .catch(error => {
+                log.innerHTML = `<p>Произошла ошибка: ${error.message}</p>`;
+                // Показать кнопку снова
+                form.querySelector('button').style.display = 'block';
+            });
+        });
+    </script>
 </body>
 </html>
