@@ -1,0 +1,3 @@
+Flask==2.0.1
+opencv-python==4.5.2.52
+pyzbar==0.1.8

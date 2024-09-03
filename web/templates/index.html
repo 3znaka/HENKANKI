@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code File Recovery</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Восстановление файла по QR-кодам</h1>
+        <form id="uploadForm">
+            <input type="file" name="files" id="fileInput" multiple class="file-input">
+            <br>
+            <button type="submit">Загрузить и восстановить</button>
+        </form>
+        <p id="status"></p>
+        <a id="downloadLink" style="display:none;" href="#">Скачать восстановленный файл</a>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

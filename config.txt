@@ -1,0 +1,5 @@
+[DEFAULT]
+inputaudio = C:/Users/danil/Downloads/Pink-Floyd-Breathe.wav
+songname = pf
+fdkaac = C:\\GitHub\\qr2aac\\fdkaac\\fdkaac.exe
+
