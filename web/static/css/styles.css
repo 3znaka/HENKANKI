@@ -17,7 +17,8 @@ body {
 }
 
 .logo {
-    max-width: 10rem;
+    max-width: 80%;
+    width: 18rem;
     margin: 2em;
 }
 
