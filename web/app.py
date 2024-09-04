@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, send_from_directory, render_template
+from flask_socketio import SocketIO, emit
 import os
 import cv2
 import struct
@@ -9,11 +10,12 @@ import binascii
 from pydub import AudioSegment
 
 app = Flask(__name__)
+socketio = SocketIO(app)
 UPLOAD_FOLDER = 'uploaded_pages'
 OUTPUT_FOLDER = 'output_files'
 TO_MERGE_FOLDER = 'tomerge'
 
-# Create directories if they don't exist
+# Создание необходимых директорий, если их не существует
 for folder in [UPLOAD_FOLDER, OUTPUT_FOLDER, TO_MERGE_FOLDER]:
     if not os.path.exists(folder):
         os.makedirs(folder)
@@ -129,7 +131,7 @@ def upload_files():
                 return jsonify(success=False, error=f"Ошибка при обработке QR-кода: {e}")
 
         processed_files += 1
-        print(f"Обработано страниц: {processed_files} из {total_files}")
+        socketio.emit('progress', {'processed': processed_files, 'total': total_files})
 
     for file_key, data in files_data.items():
         if data["total_chunks"] is not None and all(data["decoded_chunks"][i] is not None for i in range(data["total_chunks"])):
@@ -156,4 +158,4 @@ def download_file(filename):
     return send_from_directory(TO_MERGE_FOLDER, filename, as_attachment=True)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    socketio.run(app, debug=True)
