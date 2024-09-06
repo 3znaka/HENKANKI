@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Загрузка и обработка файлов</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+<img class="logo" src="/static/img/logo.svg">
+<div class="uploadForm">
+    <form id="uploadForm">
+        <input type="file" id="files" name="files" multiple>
+        <button type="submit">Загрузить</button>
+    </form>
+    <div id="progress" style="display: none;">Обработано страниц: 0</div>
+    <a id="downloadLink" href="#" style="display: none;">Скачать обработанный файл</a>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const uploadForm = document.getElementById('uploadForm');
+
+    uploadForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const filesInput = document.getElementById('files');
+        const progressDiv = document.getElementById('progress');
+        const downloadLink = document.getElementById('downloadLink');
+
+        progressDiv.textContent = 'Обработка файлов...';
+        progressDiv.style.display = 'block';
+
+        const formData = new FormData();
+        for (let i = 0; i < filesInput.files.length; i++) {
+            formData.append('files', filesInput.files[i]);
+        }
+
+        try {
+            const response = await fetch('/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                progressDiv.textContent = result.message;
+                downloadLink.href = result.download_url;
+                downloadLink.style.display = 'block';
+            } else {
+                alert(result.error);
+                progressDiv.style.display = 'none';
+            }
+        } catch (error) {
+            alert('Ошибка при загрузке файлов: ' + error);
+            progressDiv.style.display = 'none';
+        }
+    });
+});
+</script>
+</body>
+</html>
