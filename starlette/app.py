@@ -1,5 +1,5 @@
 from starlette.applications import Starlette
-from starlette.responses import JSONResponse, FileResponse, HTMLResponse
+from starlette.responses import JSONResponse, FileResponse
 from starlette.routing import Route, Mount
 from starlette.staticfiles import StaticFiles
 from collections import defaultdict
@@ -9,7 +9,6 @@ from starlette.middleware.trustedhost import TrustedHostMiddleware
 from starlette.templating import Jinja2Templates
 import cv2
 import os
-import sys
 import struct
 import base64
 from pyzbar.pyzbar import decode, ZBarSymbol
@@ -18,13 +17,10 @@ from pydub import AudioSegment
 from pydub import utils
 utils.get_prober = lambda: "/usr/bin/ffprobe"
 import uvicorn
-
 import shutil
 
 if shutil.which("ffmpeg") is None and shutil.which("ffprobe") is None:
     raise EnvironmentError("ffmpeg and ffprobe must be installed to use pydub")
-
-
 
 UPLOAD_FOLDER = 'uploaded_pages'
 OUTPUT_FOLDER = 'output_files'
@@ -85,7 +81,7 @@ def merge_audio_files():
         final_output_path = os.path.join(TO_MERGE_FOLDER, final_output_file)
 
         if os.path.exists(final_output_path):
-           os.remove(final_output_path)
+            os.remove(final_output_path)
 
         os.system(f"ffmpeg -y -i {temp_output_path} -acodec aac {final_output_path}")
 
@@ -124,6 +120,10 @@ async def upload_files(request):
             return JSONResponse({"success": False, "error": f"Не удалось загрузить изображение {file_path}."})
 
         qr_data_list = read_qr_codes_from_image(image)
+
+        file_qr_count = len(qr_data_list)
+        print(f"Файл: {file.filename}, Количество QR-кодов: {file_qr_count}")
+
         for qr_data in qr_data_list:
             try:
                 qr_data = fix_base64_padding(qr_data)
@@ -140,26 +140,32 @@ async def upload_files(request):
                     files_data[file_key]["decoded_chunks"][chunk_number] = chunk
 
             except (binascii.Error, struct.error) as e:
+                print(f"Ошибка при обработке QR-кода в файле {file.filename}: {e}")
                 return JSONResponse({"success": False, "error": f"Ошибка при обработке QR-кода: {e}"})
 
         processed_files += 1
         await request.app.websocket_manager.broadcast({'processed': processed_files, 'total': total_files})
 
     for file_key, data in files_data.items():
-        if data["total_chunks"] is not None and all(data["decoded_chunks"][i] is not None for i in range(data["total_chunks"])):
-            sorted_chunks = [data["decoded_chunks"][i] for i in range(data["total_chunks"])]
-            output_file_name = f"{data['file_name']}.{data['file_ext']}"
-            output_file_path = os.path.join(TO_MERGE_FOLDER, output_file_name)
+        if data["total_chunks"] is not None:
+            missing_chunks = [i for i in range(data["total_chunks"]) if data["decoded_chunks"][i] is None]
+            if missing_chunks:
+                print(f"Не хватает фрагментов для файла {data['file_name']}.{data['file_ext']}: {missing_chunks}")
+            else:
+                sorted_chunks = [data["decoded_chunks"][i] for i in range(data["total_chunks"])]
+                output_file_name = f"{data['file_name']}.{data['file_ext']}"
+                output_file_path = os.path.join(TO_MERGE_FOLDER, output_file_name)
+                print(f"Все фрагменты для файла {data['file_name']}.{data['file_ext']} удачно распознаны.")
 
-            if os.path.exists(output_file_path):
-                os.remove(output_file_path)
+                if os.path.exists(output_file_path):
+                    os.remove(output_file_path)
 
-            try:
-                with open(output_file_path, 'wb') as output_file:
-                    for chunk in sorted_chunks:
-                        output_file.write(chunk)
-            except Exception as e:
-                return JSONResponse({"success": False, "error": f"Ошибка при записи файла: {e}"})
+                try:
+                    with open(output_file_path, 'wb') as output_file:
+                        for chunk in sorted_chunks:
+                            output_file.write(chunk)
+                except Exception as e:
+                    return JSONResponse({"success": False, "error": f"Ошибка при записи файла: {e}"})
 
     final_output_file = merge_audio_files()
     return JSONResponse({"success": True, "message": f"Файлы успешно загружены и обработаны. Обработано страниц: {processed_files} из {total_files}", "download_url": f'/download/{os.path.basename(final_output_file)}'})
@@ -181,7 +187,7 @@ routes = [
 
 app = Starlette(routes=routes, middleware=[Middleware(TrustedHostMiddleware, allowed_hosts=["*"])])
 
-# Websocket Management
+# WebSocket Management
 class WebSocketManager:
     def __init__(self):
         self.connections = []
