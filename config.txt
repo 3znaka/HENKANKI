@@ -1,5 +1,5 @@
 [DEFAULT]
-inputaudio = C:/Users/danil/Downloads/заставка-радио-Маяк-СССР-радио.wav
-songname = zz
+inputaudio = C:/Users/danil/Downloads/radioaa (1).wav
+songname = mt
 fdkaac = C:\\GitHub\\qr2aac\\fdkaac\\fdkaac.exe
 
