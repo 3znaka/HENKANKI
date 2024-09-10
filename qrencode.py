@@ -4,7 +4,7 @@ import base64
 import qrcode
 from PIL import Image, ImageDraw, ImageFont
 
-def split_file(file_path, chunk_size=1100):
+def split_file(file_path, chunk_size=1060):
     """Разбивает файл на блоки размером chunk_size байт."""
     with open(file_path, 'rb') as f:
         chunks = []
@@ -16,7 +16,7 @@ def create_qr_code(data, output_path, chunk_number, file_name, total_chunks):
     """Создает QR код из данных и сохраняет его с номером чанка."""
     qr = qrcode.QRCode(
         version=1,
-        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        error_correction=qrcode.constants.ERROR_CORRECT_M,
         box_size=10,
         border=3,
     )
