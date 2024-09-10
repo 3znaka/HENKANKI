@@ -11,7 +11,7 @@ config.read('./config.txt')
 input_file = config['DEFAULT']['INPUTAUDIO']
 
 # Длительность отрезка в миллисекундах (15 секунд) и дополнительно 200 мс для перекрытия
-segment_duration = 15 * 1000
+segment_duration = 5 * 1000
 overlap_duration = 200  # 200 миллисекунд
 total_segment_duration = segment_duration + overlap_duration
 

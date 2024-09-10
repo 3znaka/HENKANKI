@@ -87,7 +87,6 @@ async def upload_qr(file: UploadFile = File(...)):
     except Exception as e:
         return JSONResponse(content={'status': 'error', 'message': str(e)})
 
-# Маршрут для скачивания собранного файла
 app.mount("/download", StaticFiles(directory="tomerge"), name="download")
 
 if __name__ == "__main__":

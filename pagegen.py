@@ -9,8 +9,8 @@ output_folder = 'output_pages'
 os.makedirs(output_folder, exist_ok=True)
 
 # Задайте максимальное количество столбцов и рядов
-cols = 5
-rows = 7
+cols = 3
+rows = 4
 images_per_page = cols * rows
 
 # Получение списка изображений
