@@ -4,7 +4,7 @@ import base64
 import qrcode
 from PIL import Image, ImageDraw, ImageFont
 
-def split_file(file_path, chunk_size=1060):
+def split_file(file_path, chunk_size=1049):
     """Разбивает файл на блоки размером chunk_size байт."""
     with open(file_path, 'rb') as f:
         chunks = []

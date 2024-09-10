@@ -1,5 +1,5 @@
 [DEFAULT]
-inputaudio = C:/Users/danil/Downloads/radioaa (1).wav
-songname = mt
+inputaudio = C:/Users/danil/Downloads/Texas-Ghetto-Rave-Дофаминовая-яма.wav
+songname = dy
 fdkaac = C:\\GitHub\\qr2aac\\fdkaac\\fdkaac.exe
 
