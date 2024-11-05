@@ -1,6 +1,5 @@
 # HENKANKI
 **Способ записи звуковых файлов на бумагу и обратно. Стандарт - 10 секунд на одну сторону листа А4.**
-![Henkanki logo](https://raw.githubusercontent.com/3znaka/HENKANKI/refs/heads/main/henkanki_web/static/img/logo.svg)
 
 ## Запись файла на бумажный носитель
 
