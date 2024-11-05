@@ -3,31 +3,38 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Загрузка и обработка файлов</title>
+    <title>henkanki</title>
     <link rel="stylesheet" href="/static/css/styles.css">
 </head>
 <body>
 <img class="logo" src="/static/img/logo.svg">
 <div class="uploadForm">
     <form id="uploadForm">
-        <input type="file" id="files" name="files" multiple>
-        <button type="submit">Загрузить</button>
-    </form>
-    <div id="progress" style="display: none;">Обработано страниц: 0</div>
-    <a id="downloadLink" href="#" style="display: none;">Скачать обработанный файл</a>
+    <input type="file" id="files" name="files" accept="image/*" multiple>
+    <button type="submit" id="uploadButton">загрузить</button>
+</form>
+    <div id="progress" style="display: none;">обработано:</div>
+    <a id="downloadLink" href="#" style="display: none;">скачать</a>
 </div>
+<a href="https://ъыь.рф/" style="position: absolute;color: white;bottom: 10px;/* left: 41%; */">
+    by ddnvd
+ </a>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     const uploadForm = document.getElementById('uploadForm');
+    const uploadButton = document.getElementById('uploadButton');
 
     uploadForm.addEventListener('submit', async (event) => {
         event.preventDefault();
+
+        // Скрыть кнопку загрузки
+        uploadButton.style.display = 'none';
 
         const filesInput = document.getElementById('files');
         const progressDiv = document.getElementById('progress');
         const downloadLink = document.getElementById('downloadLink');
 
-        progressDiv.textContent = 'Обработка файлов...';
+        progressDiv.textContent = 'сканирую...';
         progressDiv.style.display = 'block';
 
         const formData = new FormData();
@@ -51,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 progressDiv.style.display = 'none';
             }
         } catch (error) {
-            alert('Ошибка при загрузке файлов: ' + error);
+            alert('случилась какая-то фигня.' + error);
             progressDiv.style.display = 'none';
         }
     });
