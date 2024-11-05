@@ -5,7 +5,6 @@ from ttkbootstrap import Style
 import configparser
 import os
 
-# Функция для выбора файла и обновления config.txt для аудиофайла
 def select_audio_file():
     file_path = filedialog.askopenfilename(
         filetypes=[("WAV files", "*.wav")],
@@ -19,7 +18,7 @@ def select_audio_file():
         audio_file_entry.config(state='readonly')
         update_config_file(audio_file=file_path)
 
-# Функция для выбора файла и обновления config.txt для fdkaac
+
 def select_fdkaac_file():
     file_path = filedialog.askopenfilename(
         filetypes=[("Executable files", "*.exe")],
@@ -27,7 +26,7 @@ def select_fdkaac_file():
     )
     
     if file_path:
-        # Преобразование пути для fdkaac с двойными обратными слешами
+       
         file_path = file_path.replace("/", "\\\\")
         fdkaac_file_entry.config(state='normal')
         fdkaac_file_entry.delete(0, tk.END)
@@ -35,7 +34,7 @@ def select_fdkaac_file():
         fdkaac_file_entry.config(state='readonly')
         update_config_file(fdkaac=file_path)
 
-# Функция для обновления config.txt
+
 def update_config_file(audio_file=None, fdkaac=None, song_name=None):
     config = configparser.ConfigParser()
 
@@ -114,7 +113,7 @@ def update_song_name(*args):
     update_config_file(song_name=song_name)
 
 root = tk.Tk()
-root.title("QR2AUDIO")
+root.title("HENKANKI ENCODER")
 
 style = Style(theme="sandstone")
 
