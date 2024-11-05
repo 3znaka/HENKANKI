@@ -117,12 +117,12 @@ async def upload_files(request):
 
         image = cv2.imread(file_path)
         if image is None:
-            return JSONResponse({"success": False, "error": f"Не удалось загрузить изображение {file_path}."})
+            return JSONResponse({"success": False, "error": f"не получилось загрузить {file_path}."})
 
         qr_data_list = read_qr_codes_from_image(image)
 
         file_qr_count = len(qr_data_list)
-        print(f"Файл: {file.filename}, Количество QR-кодов: {file_qr_count}")
+        print(f"{file.filename}, кодов: {file_qr_count}")
 
         for qr_data in qr_data_list:
             try:
@@ -165,10 +165,10 @@ async def upload_files(request):
                         for chunk in sorted_chunks:
                             output_file.write(chunk)
                 except Exception as e:
-                    return JSONResponse({"success": False, "error": f"Ошибка при записи файла: {e}"})
+                    return JSONResponse({"success": False, "error": f"ошибка при записи: {e}"})
 
     final_output_file = merge_audio_files()
-    return JSONResponse({"success": True, "message": f"Файлы успешно загружены и обработаны. Обработано страниц: {processed_files} из {total_files}", "download_url": f'/download/{os.path.basename(final_output_file)}'})
+    return JSONResponse({"success": True, "message": f"всё получилось. отсканировано {processed_files} из {total_files}", "download_url": f'/download/{os.path.basename(final_output_file)}'})
 
 async def download_file(request):
     filename = request.path_params['filename']
@@ -176,7 +176,7 @@ async def download_file(request):
     if os.path.exists(file_path):
         return FileResponse(file_path, filename=filename)
     else:
-        return JSONResponse({"success": False, "error": "Файл не найден."})
+        return JSONResponse({"success": False, "error": "файл не найден. и хрен что ты с этим теперь сделаешь"})
 
 routes = [
     Route('/', endpoint=index),
